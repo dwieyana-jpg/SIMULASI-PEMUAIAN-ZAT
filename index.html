@@ -4,83 +4,49 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Pemuaian Luas HP Friendly</title>
+<title>Simulasi Pemuaian</title>
 
 <style>
 body {
   font-family: Arial;
-  margin: 0;
   text-align: center;
-  background: linear-gradient(to bottom, #e8f5e9, #ffffff);
+  margin: 0;
+  background: linear-gradient(to bottom, #e3f2fd, #ffffff);
 }
 
 .container {
-  padding: 10px;
+  padding: 20px;
 }
 
-/* AREA RESPONSIVE */
-.area-box {
-  width: 100%;
-  aspect-ratio: 1 / 1; /* biar kotak di HP */
-  max-height: 300px;
-  margin: auto;
-  position: relative;
-  border: 1px solid #ccc;
-  background: #fafafa;
+h1 {
+  margin-bottom: 10px;
 }
 
-/* GRID */
-.grid {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(#ddd 1px, transparent 1px),
-                    linear-gradient(90deg, #ddd 1px, transparent 1px);
-  background-size: 20px 20px;
+.menu {
+  margin-top: 20px;
 }
 
-/* PLAT */
-.plate {
-  width: 40%;
-  height: 40%;
-  background: linear-gradient(135deg, #66bb6a, #2e7d32);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(1);
-  border-radius: 10px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.button {
+  display: block;
+  margin: 15px auto;
+  padding: 15px;
+  width: 90%;
+  max-width: 300px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  color: white;
 }
 
-/* LUBANG */
-.hole {
-  width: 30%;
-  height: 30%;
-  background: #fafafa;
-  border-radius: 50%;
-}
+.panjang { background: #6d4c41; }
+.luas { background: #2e7d32; }
+.volume { background: #c62828; }
 
-/* KONTROL */
-.controls {
-  margin-top: 10px;
-}
-
-input, select {
-  width: 95%;
-  padding: 12px;
-  margin: 6px 0;
-  font-size: 16px;
-  border-radius: 8px;
-}
-
-/* INFO */
-.info {
-  margin-top: 10px;
-  font-weight: bold;
-  font-size: 14px;
+.footer {
+  margin-top: 30px;
+  font-size: 12px;
+  opacity: 0.6;
 }
 </style>
 </head>
@@ -89,76 +55,33 @@ input, select {
 
 <div class="container">
 
-<h3>🟩 Pemuaian Luas (HP Friendly)</h3>
+<h1>🔥 Simulasi Pemuaian</h1>
+<p>Pilih jenis pemuaian:</p>
 
-<div class="area-box">
-  <div class="grid"></div>
+<div class="menu">
+  <button class="button panjang" onclick="go('panjang.html')">
+    📏 Pemuaian Panjang
+  </button>
 
-  <div class="plate" id="plate">
-    <div class="hole" id="hole"></div>
-  </div>
+  <button class="button luas" onclick="go('luas.html')">
+    🟩 Pemuaian Luas
+  </button>
+
+  <button class="button volume" onclick="go('volume.html')">
+    🎈 Pemuaian Volume
+  </button>
 </div>
 
-<div class="controls">
-  🌡️ <span id="tempVal">30</span> °C
-  <input type="range" min="0" max="200" value="30" id="slider">
-
-  📐 Luas awal (m²)
-  <input type="number" id="areaInput" value="1">
-
-  🧱 Bahan
-  <select id="material">
-    <option value="12e-6">Besi</option>
-    <option value="23e-6">Aluminium</option>
-    <option value="17e-6">Tembaga</option>
-  </select>
+<div class="footer">
+  © 2026 Pak Dwi Yono
 </div>
-
-<div class="info" id="info"></div>
 
 </div>
 
 <script>
-let plate = document.getElementById("plate");
-let hole = document.getElementById("hole");
-let slider = document.getElementById("slider");
-let tempVal = document.getElementById("tempVal");
-let material = document.getElementById("material");
-let areaInput = document.getElementById("areaInput");
-let info = document.getElementById("info");
-
-function update() {
-  let T = parseFloat(slider.value);
-  let A0 = parseFloat(areaInput.value);
-  let alpha = parseFloat(material.value);
-
-  let beta = 2 * alpha;
-
-  tempVal.innerText = T;
-
-  let deltaA = beta * A0 * T;
-  let A = A0 + deltaA;
-
-  let scale = 1 + deltaA * 5;
-
-  plate.style.transform =
-    "translate(-50%, -50%) scale(" + scale + ")";
-
-  // lubang ikut membesar
-  let holeScale = scale;
-  hole.style.transform = "scale(" + holeScale + ")";
-
-  info.innerHTML =
-    "🔥 Lubang ikut memuai<br>" +
-    "ΔA = " + deltaA.toExponential(2) + " m²<br>" +
-    "A akhir = " + A.toFixed(4) + " m²";
+function go(page){
+  window.location.href = page;
 }
-
-slider.oninput = update;
-material.onchange = update;
-areaInput.oninput = update;
-
-update();
 </script>
 
 </body>
