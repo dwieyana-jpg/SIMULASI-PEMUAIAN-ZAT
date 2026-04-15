@@ -3,102 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Pemuaian Panjang</title>
+<title>Simulasi Pemuaian</title>
 
 <style>
 body {
   font-family: Arial;
-  margin: 0;
   text-align: center;
-  padding-bottom: 70px; /* ruang navbar */
+  background: #e3f2fd;
 }
-
-/* NAVBAR BAWAH */
-.navbar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 60px;
-  background: #1976d2;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  color: white;
-}
-
-.navbar button {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.navbar button.active {
-  font-weight: bold;
-  color: yellow;
-}
-
-/* KONTEN */
-.container {
-  padding: 15px;
-}
-
-/* SIMULASI SEDERHANA (contoh batang) */
-.rod {
-  height: 20px;
-  width: 200px;
-  background: brown;
-  margin: 40px auto;
-  transition: width 0.3s;
+button {
+  display:block;
+  margin:15px auto;
+  padding:15px;
+  width:80%;
+  font-size:18px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<h1>🔥 Simulasi Pemuaian</h1>
 
-<h3>📏 Pemuaian Panjang</h3>
+<button onclick="location.href='panjang.html'">
+📏 Pemuaian Panjang
+</button>
 
-<div class="rod" id="rod"></div>
+<button onclick="location.href='luas.html'">
+🟩 Pemuaian Luas
+</button>
 
-🌡️ <span id="tempVal">30</span>°C<br>
-<input type="range" min="0" max="200" value="30" id="slider">
-
-</div>
-
-<!-- NAVBAR -->
-<div class="navbar">
-  <button onclick="go('index.html')">🏠<br>Home</button>
-  <button class="active" onclick="go('panjang.html')">📏<br>Panjang</button>
-  <button onclick="go('luas.html')">🟩<br>Luas</button>
-  <button onclick="go('volume.html')">🎈<br>Volume</button>
-</div>
-
-<script>
-let rod = document.getElementById("rod");
-let slider = document.getElementById("slider");
-let tempVal = document.getElementById("tempVal");
-
-function update(){
-  let T = slider.value;
-  tempVal.innerText = T;
-
-  let width = 200 + T*0.5;
-  rod.style.width = width + "px";
-}
-
-slider.oninput = update;
-
-function go(page){
-  window.location.href = page;
-}
-
-update();
-</script>
+<button onclick="location.href='volume.html'">
+🎈 Pemuaian Volume
+</button>
 
 </body>
 </html>
