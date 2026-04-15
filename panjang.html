@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Simulasi Pemuaian Panjang</title>
+
+<style>
+body {
+  font-family: Arial;
+  text-align: center;
+  margin: 0;
+  background: linear-gradient(to bottom, #fff3e0, #ffffff);
+}
+
+.container {
+  padding: 15px;
+}
+
+/* BATANG */
+.rod-box {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 15px;
+}
+
+.rod {
+  height: 20px;
+  width: 200px;
+  background: linear-gradient(to right, #6d4c41, #a1887f);
+  border-radius: 10px;
+  margin: auto;
+  transition: width 0.3s ease;
+}
+
+/* SLIDER */
+.controls {
+  margin-top: 10px;
+}
+
+input, select {
+  width: 90%;
+  padding: 8px;
+  margin: 5px;
+  font-size: 16px;
+}
+
+/* INFO */
+.info {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* CANVAS */
+canvas {
+  margin-top: 15px;
+  border: 1px solid #ccc;
+  background: white;
+  width: 100%;
+  max-width: 350px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h3>🔥 Pemuaian Panjang</h3>
+
+<!-- ANIMASI DI ATAS -->
+<div class="rod-box">
+  <div class="rod" id="rod"></div>
+</div>
+
+<!-- KONTROL -->
+<div class="controls">
+  🌡️ Suhu: <span id="tempVal">30</span> °C<br>
+  <input type="range" min="0" max="200" value="30" id="tempSlider">
+
+  📏 Panjang Awal (m)
+  <input type="number" id="lengthInput" value="1" step="0.1">
+
+  🧱 Bahan
+  <select id="material">
+    <option value="12e-6">Besi</option>
+    <option value="23e-6">Aluminium</option>
+    <option value="17e-6">Tembaga</option>
+  </select>
+</div>
+
+<div class="info" id="info"></div>
+
+<!-- CANVAS TABEL -->
+<canvas id="tableCanvas" width="350" height="200"></canvas>
+
+</div>
+
+<script>
+let rod = document.getElementById("rod");
+let slider = document.getElementById("tempSlider");
+let tempVal = document.getElementById("tempVal");
+let material = document.getElementById("material");
+let lengthInput = document.getElementById("lengthInput");
+let info = document.getElementById("info");
+
+let canvas = document.getElementById("tableCanvas");
+let ctx = canvas.getContext("2d");
+
+// DATA KOEFISIEN
+let materials = [
+  {name:"Besi", alpha:12e-6},
+  {name:"Aluminium", alpha:23e-6},
+  {name:"Tembaga", alpha:17e-6}
+];
+
+// GAMBAR TABEL
+function drawTable() {
+  ctx.clearRect(0,0,350,200);
+
+  ctx.font = "14px Arial";
+  ctx.fillText("Tabel Koefisien Muai Panjang", 50, 20);
+
+  let y = 50;
+
+  materials.forEach((m,i)=>{
+    ctx.fillText(
+      m.name + " : " + m.alpha.toExponential(2) + " /°C",
+      30,
+      y
+    );
+    y += 30;
+  });
+}
+
+// UPDATE
+function update() {
+  let T = parseFloat(slider.value);
+  let L0 = parseFloat(lengthInput.value);
+  let alpha = parseFloat(material.value);
+
+  tempVal.innerText = T;
+
+  let deltaL = alpha * L0 * T;
+  let L = L0 + deltaL;
+
+  // visual scaling biar kelihatan di HP
+  let visual = 200 + deltaL * 5000;
+  rod.style.width = visual + "px";
+
+  info.innerHTML =
+    "ΔL = " + deltaL.toExponential(2) + " m<br>" +
+    "L akhir = " + L.toFixed(4) + " m";
+
+  drawTable();
+}
+
+// EVENT
+slider.oninput = update;
+material.onchange = update;
+lengthInput.oninput = update;
+
+update();
+</script>
+
+</body>
+</html>

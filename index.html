@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pemuaian Luas HP Friendly</title>
+
+<style>
+body {
+  font-family: Arial;
+  margin: 0;
+  text-align: center;
+  background: linear-gradient(to bottom, #e8f5e9, #ffffff);
+}
+
+.container {
+  padding: 10px;
+}
+
+/* AREA RESPONSIVE */
+.area-box {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* biar kotak di HP */
+  max-height: 300px;
+  margin: auto;
+  position: relative;
+  border: 1px solid #ccc;
+  background: #fafafa;
+}
+
+/* GRID */
+.grid {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(#ddd 1px, transparent 1px),
+                    linear-gradient(90deg, #ddd 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* PLAT */
+.plate {
+  width: 40%;
+  height: 40%;
+  background: linear-gradient(135deg, #66bb6a, #2e7d32);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  border-radius: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* LUBANG */
+.hole {
+  width: 30%;
+  height: 30%;
+  background: #fafafa;
+  border-radius: 50%;
+}
+
+/* KONTROL */
+.controls {
+  margin-top: 10px;
+}
+
+input, select {
+  width: 95%;
+  padding: 12px;
+  margin: 6px 0;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+/* INFO */
+.info {
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h3>🟩 Pemuaian Luas (HP Friendly)</h3>
+
+<div class="area-box">
+  <div class="grid"></div>
+
+  <div class="plate" id="plate">
+    <div class="hole" id="hole"></div>
+  </div>
+</div>
+
+<div class="controls">
+  🌡️ <span id="tempVal">30</span> °C
+  <input type="range" min="0" max="200" value="30" id="slider">
+
+  📐 Luas awal (m²)
+  <input type="number" id="areaInput" value="1">
+
+  🧱 Bahan
+  <select id="material">
+    <option value="12e-6">Besi</option>
+    <option value="23e-6">Aluminium</option>
+    <option value="17e-6">Tembaga</option>
+  </select>
+</div>
+
+<div class="info" id="info"></div>
+
+</div>
+
+<script>
+let plate = document.getElementById("plate");
+let hole = document.getElementById("hole");
+let slider = document.getElementById("slider");
+let tempVal = document.getElementById("tempVal");
+let material = document.getElementById("material");
+let areaInput = document.getElementById("areaInput");
+let info = document.getElementById("info");
+
+function update() {
+  let T = parseFloat(slider.value);
+  let A0 = parseFloat(areaInput.value);
+  let alpha = parseFloat(material.value);
+
+  let beta = 2 * alpha;
+
+  tempVal.innerText = T;
+
+  let deltaA = beta * A0 * T;
+  let A = A0 + deltaA;
+
+  let scale = 1 + deltaA * 5;
+
+  plate.style.transform =
+    "translate(-50%, -50%) scale(" + scale + ")";
+
+  // lubang ikut membesar
+  let holeScale = scale;
+  hole.style.transform = "scale(" + holeScale + ")";
+
+  info.innerHTML =
+    "🔥 Lubang ikut memuai<br>" +
+    "ΔA = " + deltaA.toExponential(2) + " m²<br>" +
+    "A akhir = " + A.toFixed(4) + " m²";
+}
+
+slider.oninput = update;
+material.onchange = update;
+areaInput.oninput = update;
+
+update();
+</script>
+
+</body>
+</html>

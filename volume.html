@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Simulasi Pemuaian Gas Realistis</title>
+
+<style>
+body {
+  font-family: Arial;
+  text-align: center;
+  background: linear-gradient(to bottom, #e3f2fd, #ffffff);
+}
+
+.container {
+  position: relative;
+  width: 300px;
+  margin: auto;
+}
+
+/* BOTOL */
+.bottle {
+  width: 120px;
+  height: 200px;
+  background: #90caf9;
+  border-radius: 20px;
+  margin: auto;
+  position: relative;
+}
+
+.neck {
+  width: 40px;
+  height: 40px;
+  background: #64b5f6;
+  margin: auto;
+  border-radius: 10px;
+}
+
+/* BALON REALISTIS */
+.balloon {
+  position: absolute;
+  bottom: 220px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 80px;
+  background: radial-gradient(circle at 30% 30%, #ff6b6b, #c62828);
+  border-radius: 50% 50% 45% 45%;
+  transition: all 0.2s ease;
+}
+
+/* LEHER BALON */
+.balloon::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 15px;
+  background: #b71c1c;
+  border-radius: 5px;
+}
+
+/* PARTIKEL */
+.particle {
+  width: 5px;
+  height: 5px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+}
+
+/* PANEL */
+.controls {
+  margin-top: 20px;
+}
+
+.info {
+  margin-top: 10px;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🎈 Simulasi Pemuaian Gas (Realistis)</h2>
+
+<div class="container">
+  <div class="balloon" id="balloon"></div>
+  <div class="neck"></div>
+  <div class="bottle" id="bottle"></div>
+</div>
+
+<div class="controls">
+  <p>🌡️ Suhu: <span id="tempValue">30</span> °C</p>
+  <input type="range" min="0" max="100" value="30" id="slider">
+</div>
+
+<div class="info" id="infoText"></div>
+
+<script>
+let slider = document.getElementById("slider");
+let balloon = document.getElementById("balloon");
+let tempValue = document.getElementById("tempValue");
+let infoText = document.getElementById("infoText");
+let bottle = document.getElementById("bottle");
+
+let particles = [];
+let velocities = [];
+
+// partikel
+for (let i = 0; i < 40; i++) {
+  let p = document.createElement("div");
+  p.classList.add("particle");
+  bottle.appendChild(p);
+
+  particles.push(p);
+  velocities.push({
+    x: Math.random() * 2,
+    y: Math.random() * 2
+  });
+}
+
+// animasi partikel
+function animateParticles(T) {
+  particles.forEach((p, i) => {
+    let v = velocities[i];
+
+    let x = (p.offsetLeft || 50) + v.x * (T/20);
+    let y = (p.offsetTop || 50) + v.y * (T/20);
+
+    if (x < 0 || x > 110) v.x *= -1;
+    if (y < 0 || y > 190) v.y *= -1;
+
+    p.style.left = x + "px";
+    p.style.top = y + "px";
+  });
+}
+
+// update
+function update(T) {
+  tempValue.innerText = T;
+
+  // BALON NAIK KE ATAS (REALISTIS)
+  let height = 80 + T * 1.2;
+  let width = 60 + T * 0.5;
+
+  balloon.style.height = height + "px";
+  balloon.style.width = width + "px";
+
+  // tetap di atas botol
+  balloon.style.bottom = (220 + T * 0.3) + "px";
+
+  // info konsep
+  if (T < 30) {
+    infoText.innerText = "Partikel lambat → balon kecil";
+  } else if (T < 70) {
+    infoText.innerText = "Partikel cepat → balon naik & membesar";
+  } else {
+    infoText.innerText = "Energi tinggi → balon mengembang maksimum!";
+  }
+
+  animateParticles(T);
+}
+
+slider.oninput = function() {
+  update(this.value);
+};
+
+// loop partikel
+setInterval(() => {
+  animateParticles(slider.value);
+}, 50);
+
+update(30);
+</script>
+
+</body>
+</html>
