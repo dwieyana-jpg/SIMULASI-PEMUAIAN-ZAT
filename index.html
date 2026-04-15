@@ -4,49 +4,55 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Simulasi Pemuaian</title>
+<title>Pemuaian Panjang</title>
 
 <style>
 body {
   font-family: Arial;
-  text-align: center;
   margin: 0;
-  background: linear-gradient(to bottom, #e3f2fd, #ffffff);
+  text-align: center;
+  padding-bottom: 70px; /* ruang navbar */
 }
 
-.container {
-  padding: 20px;
-}
-
-h1 {
-  margin-bottom: 10px;
-}
-
-.menu {
-  margin-top: 20px;
-}
-
-.button {
-  display: block;
-  margin: 15px auto;
-  padding: 15px;
-  width: 90%;
-  max-width: 300px;
-  font-size: 18px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
+/* NAVBAR BAWAH */
+.navbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: #1976d2;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   color: white;
 }
 
-.panjang { background: #6d4c41; }
-.luas { background: #2e7d32; }
-.volume { background: #c62828; }
-
-.footer {
-  margin-top: 30px;
+.navbar button {
+  background: none;
+  border: none;
+  color: white;
   font-size: 12px;
-  opacity: 0.6;
+  cursor: pointer;
+}
+
+.navbar button.active {
+  font-weight: bold;
+  color: yellow;
+}
+
+/* KONTEN */
+.container {
+  padding: 15px;
+}
+
+/* SIMULASI SEDERHANA (contoh batang) */
+.rod {
+  height: 20px;
+  width: 200px;
+  background: brown;
+  margin: 40px auto;
+  transition: width 0.3s;
 }
 </style>
 </head>
@@ -55,33 +61,43 @@ h1 {
 
 <div class="container">
 
-<h1>🔥 Simulasi Pemuaian</h1>
-<p>Pilih jenis pemuaian:</p>
+<h3>📏 Pemuaian Panjang</h3>
 
-<div class="menu">
-  <button class="button panjang" onclick="go('panjang.html')">
-    📏 Pemuaian Panjang
-  </button>
+<div class="rod" id="rod"></div>
 
-  <button class="button luas" onclick="go('luas.html')">
-    🟩 Pemuaian Luas
-  </button>
+🌡️ <span id="tempVal">30</span>°C<br>
+<input type="range" min="0" max="200" value="30" id="slider">
 
-  <button class="button volume" onclick="go('volume.html')">
-    🎈 Pemuaian Volume
-  </button>
 </div>
 
-<div class="footer">
-  © 2026 Pak Dwi Yono
-</div>
-
+<!-- NAVBAR -->
+<div class="navbar">
+  <button onclick="go('index.html')">🏠<br>Home</button>
+  <button class="active" onclick="go('panjang.html')">📏<br>Panjang</button>
+  <button onclick="go('luas.html')">🟩<br>Luas</button>
+  <button onclick="go('volume.html')">🎈<br>Volume</button>
 </div>
 
 <script>
+let rod = document.getElementById("rod");
+let slider = document.getElementById("slider");
+let tempVal = document.getElementById("tempVal");
+
+function update(){
+  let T = slider.value;
+  tempVal.innerText = T;
+
+  let width = 200 + T*0.5;
+  rod.style.width = width + "px";
+}
+
+slider.oninput = update;
+
 function go(page){
   window.location.href = page;
 }
+
+update();
 </script>
 
 </body>
